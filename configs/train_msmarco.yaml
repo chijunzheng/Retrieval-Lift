@@ -1,0 +1,35 @@
+seed: 42
+
+# Mini sizes (tune up/down to fit your time)
+msmarco:
+  max_corpus_docs: 200000     # ~200k passages (fits RAM; ~600MB of float32 embeddings)
+  max_train_queries: 50000    # use <=50k for a quick first pass
+  max_dev_queries: 2000
+
+paths:
+  out_dir: "data/msmarco_mini"
+
+embedding_model: "BAAI/bge-base-en-v1.5"
+embedding_max_length: 384
+normalize_embeddings: true
+bge_query_instruction: "Represent this query for retrieving relevant documents: "
+
+index:
+  kind: "auto"
+  ef_construction: 200
+  M: 32
+  ef_search: 96
+
+mining:
+  retrieve_top_k: 200         # depth for mining candidates
+  hard_neg_per_query: 4       # keep the top-4 non-positives
+
+train:
+  batch_size: 64
+  lr: 2.0e-5
+  num_epochs: 2
+  grad_accum: 2
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  save_dir: "outputs/bi_encoder_ft_hn"
+  device: "cuda"               # mps | cuda | cpu

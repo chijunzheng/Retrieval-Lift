@@ -1,0 +1,38 @@
+seed: 42
+
+datasets:
+  - name: fiqa
+  - name: scidocs
+  - name: dbpedia-entity
+  # - name: nfcorpus   # optional, comment in if you want four
+
+embedding_model: "BAAI/bge-base-en-v1.5"
+embedding_max_length: 384
+embedding_batch_size: 64
+normalize_embeddings: true
+bge_query_instruction: "Represent this query for retrieving relevant documents: "
+bge_passage_prefix: ""   # keep empty; BGE handles well without, but configurable
+
+index:
+  kind: "auto"          # "faiss", "hnsw", or "auto"
+  ef_construction: 200  # hnsw
+  M: 32                 # hnsw graph degree
+  ef_search: 96         # hnsw search breadth
+
+retrieve:
+  top_k: 100
+
+rerank:
+  enabled: false
+  model: "BAAI/bge-reranker-base"
+  batch_size: 32
+  top_k: 20            # rerank the top-K retrieved
+
+metrics:
+  ks: [10, 100]        # for Recall@K, nDCG@K; MRR uses @10 by convention
+
+runtime:
+  device: "cuda"        # "mps", "cpu", or "cuda" (auto-detect inside code is fine)
+  num_workers: 4
+  cache_dir: "./data/cache"
+

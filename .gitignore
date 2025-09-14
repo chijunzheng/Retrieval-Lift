@@ -1,0 +1,7 @@
+data/
+outputs/
+indexes/
+*.pt
+*.bin
+*.onnx
+*.ipynb_checkpoints
